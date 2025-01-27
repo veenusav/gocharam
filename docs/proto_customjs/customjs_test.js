@@ -1,3 +1,5 @@
+//give like this in the field to load this file: 
+//gocharam/proto_customjs/customjs_test.js
 
 window.module = {
 
