@@ -1,0 +1,15 @@
+id,title,icon,description
+camera,Grab frame,ip_camera.svg,Capture frame from camera
+storedvideo,Stored Video,video_file.svg,Video from disk/store
+img_resize,Resize,img_resize.svg,Resize a frame/image
+img_cvtcolor,Convert Colours,img_cvtcolor.svg,Change the image's color space
+img_show,Show image,img_show.svg,Display image
+face_detection,Detect Faces,face_boxes.svg,Detect human faces
+head_pose_detection,Detect Head Pose,head_pose.svg,Detect the pose of dectected faces
+head_landmarks_detection,Detect Head Landmarks,head_landmarks.svg,Detect the landmarks of dectected faces
+eye_opennes_estimation,Estimate Eye openness,eye_opennes.svg,Check eye is open or not
+mouth_opennes_estimation,Estimate Mouth openness,mouth_opennes.svg,Check mouth is open or not
+car_detection,Detect cars,car_boxes.svg,Detect cars
+lens_glare_correction,detect and remove glares,lense_glare.svg,Remove potential glares on captured images
+average,Average,average.svg,Calculate mean
+custom,Custom Action,custom.svg,Special Operation

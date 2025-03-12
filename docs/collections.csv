@@ -1,0 +1,5 @@
+id,title,icon,description
+cv, CV,cv.svg, Computer Vision functions
+ai, AI,ai.svg, Learned Model based functions
+math,Mathematical Ops,math.svg,Numeric calculations
+others,Misc,others.svg, Various functions
