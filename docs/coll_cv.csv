@@ -3,5 +3,6 @@ camera
 storedvideo
 img_show
 img_resize
+img_crop
 img_cvtcolor
 lens_glare_correction
