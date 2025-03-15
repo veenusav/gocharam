@@ -50,35 +50,30 @@ This is a web application host and test kind of programmer environment. so, afte
 
 ## Known Issues/Todo
 Listing known issues or bugs in the project. this is not that descriptive. But will give a pointer to think. See Future Improvements section for broader level actions.
-1.	all type of nodes with handles	feature
-1.	good  colors of node & edge	feature
-1.	handles should move out of outline	bug
-1.	node is not added on position	bug
-1.	demo a sample graph for ns	feature
 1.	undo redo.	
 1.	Add Node On Edge Drop	feature
 1.	Drag Handle	feature
-1.	auto fitview	feature
-1.	avoid optional attributes while creating instance	bug
-1.	edge styling dynamic with common def props	feature
-1.	proper colors and styles in css	feature
-1.	attribute try node context menu	feature
+1.	auto fitview	feature (issue at load time)
+1.	avoid optional attributes while creating instance	(betterment)
+1.	edge styling dynamic with common def props	feature (to reduce file format complexity)
+1.	proper colors and styles in css	feature (a few items too)
+1.	attribute try node context menu	feature 
 1.	try more color themes	feature
-1.	load dialog with saved tags from local storage	feature
+1.	load dialog with saved tags from local storage	feature (now only disk)
 1.	save/load esc button and enter needed	feature
 1.	node edge style to css	feature
 
-## Future Improvements
+## Future Improvements (compared to last)
 *Section for potential improvements or features to be added.*
-| # | Brief | Details |
-|---|---|---|
-| 1   | Local file system store | store/retrieve data to hard disk files |
-| 2   | Attributes | Rich attibute data entery UI has to be done|
-| 3   | function-type procesing in editor | When a function (that is node) is configured, its core part is its formulation. that is called function-type. This can be configured with js files by the platform providers. This has been prototyped and tested with dynamic JS loading and function invocation. Even function-type specific attributes will be populated for for the graph definition. The attibute's value will be validated using these dynamic function-type Js.  |
-| 4 | Exchange format | This is a graph based programming language. Exchange of information can be done through a defined data structure through text format like JSON. There will be defintion part and an instance part. the definition gives bare minimum information of the data flow with functions and flow.(aka nodes and edges). The instane gives all the parameters (known as attributes to nodes) for creating a meaningful processing at the target platform. From the definition, the tool chain could retarget a new instance whenever required. These concepts has to be implemented. And the exchange format should be validated at the UI level. later this can be fed to tensorflow based AI target platform.|
-| 5   | Library | storing pre-configured functions as library for ready-made use|
-| 6   | Automatic layouting | Functions and flow are the definition of the logic. The diagram can be generated with automated algorithms.|
-| 7   | Printing / Documentation | Pagination, Header, Footer|
+| # | Brief | Details |status |
+|---|---|---|----|
+| 1   | Local file system store | store/retrieve data to hard disk files | done|
+| 2   | Attributes | Rich attibute data entery UI has to be done| done |
+| 3   | function-type procesing in editor | When a function (that is node) is configured, its core part is its formulation. that is called function-type. This can be configured with js files by the platform providers. This has been prototyped and tested with dynamic JS loading and function invocation. Even function-type specific attributes will be populated for for the graph definition. The attibute's value will be validated using these dynamic function-type Js.  | done. but need to enrich with types|
+| 4 | Exchange format | This is a graph based programming language. Exchange of information can be done through a defined data structure through text format like JSON. There will be defintion part and an instance part. the definition gives bare minimum information of the data flow with functions and flow.(aka nodes and edges). The instane gives all the parameters (known as attributes to nodes) for creating a meaningful processing at the target platform. From the definition, the tool chain could retarget a new instance whenever required. These concepts has to be implemented. And the exchange format should be validated at the UI level. later this can be fed to tensorflow based AI target platform.| check needed |
+| 5   | Library | storing pre-configured functions as library for ready-made use| sub graph tbd |
+| 6   | Automatic layouting | Functions and flow are the definition of the logic. The diagram can be generated with automated algorithms.| need to do. also horizontal dir|
+| 7   | Printing / Documentation | Pagination, Header, Footer|| tbd|
 
 ## References
 *Section to include any references or resources that are helpful for development.*
@@ -100,6 +95,7 @@ function prompt {
 |---|---|---|
 | 2025 Feb 7 | Veenus | Created|
 | 2025 Feb 25 | Veenus | Released a browser local saved version with only graphics attibutes|
+| 2025 Mar 16 | Veenus | Local disk save graphs, better json format, attribute dlg, port configurations|
 
 
 **End of File**
