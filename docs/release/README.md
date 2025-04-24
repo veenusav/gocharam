@@ -67,6 +67,7 @@ Other than code, the following files are relevant for an explanation.
 
 ## Future Improvements 
 *Section for potential improvements or features to be added.*
+
 | # | Brief | Details |status |
 |---|---|---|----|
 | 1   | Local file system store | store/retrieve data to hard disk files. `May be Webserver too` | done|

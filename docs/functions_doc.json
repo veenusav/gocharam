@@ -1,0 +1,102 @@
+[
+    {
+        "template": "unique_func_id",
+        "name": "xyz function",
+        "category": "ai",
+        "input_ports": [
+            {
+                "type": "image",
+                "name": "RGB",
+                "resolution": [
+                    256,
+                    256
+                ]
+            }
+        ],
+        "output_ports": [
+            {
+                "type": "metabox_1D_vector",
+                "name": "num",
+                "dimension": 256
+            }
+        ],
+        "confidenceScore": 0.6,
+        "exe_link": "",
+        "model_link": "",
+        "comment": "Like Detect human faces",
+        "specific_criminals": "-"
+    },
+    {
+        "template": "img_facedetect_sp",
+        "name": "detect face and change color",
+        "category": "cv",
+        "input_ports": [
+            {
+                "type": "geolocation",
+                "name": "position"
+            },
+            {
+                "type": "image",
+                "name": "RGB",
+                "resolution": [
+                    1920,
+                    1080
+                ]
+            }
+        ],
+        "output_ports": [
+            {
+                "type": "image",
+                "name": "RGB",
+                "resolution": [
+                    64,
+                    64
+                ]
+            }
+        ],
+        "comment": "faces based on earth locations",
+        "specific_criminals": "-",
+        "hint": "specific_criminals: if you provide specific csv file, it will be used to filter the criminals. ex: cia.csv",
+        "linkages": [
+            {
+                "subgraph": "facedetect-special.json",
+                "input_ports": [
+                    {
+                        "source": ".",
+                        "sourceHandle": "in-2",
+                        "target": "subgraph.1",
+                        "targetHandle": "in-1"
+                    },
+                    {
+                        "source": ".",
+                        "sourceHandle": "in-2",
+                        "target": "subgraph.3",
+                        "targetHandle": "in-1"
+                    },
+                    {
+                        "source": ".",
+                        "sourceHandle": "in-1",
+                        "target": "subgraph.4",
+                        "targetHandle": "in-1"
+                    }
+                ],
+                "output_ports": [
+                    {
+                        "source": "subgraph.2",
+                        "sourceHandle": "out-1",
+                        "target": ".",
+                        "targetHandle": "out-1"
+                    }
+                ],
+                "attributes": [
+                    {
+                        "source": ".",
+                        "sourceAttrib": "specific_criminals",
+                        "target": "subgraph.4",
+                        "targetAttrib": "known_locations"
+                    }
+                ]
+            }
+        ]
+    }
+]

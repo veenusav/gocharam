@@ -1,0 +1,275 @@
+[
+    {
+        "template": "camera",
+        "name": "Camera",
+        "category": "cv",
+        "input_ports": [],
+        "output_ports": [
+            { "type": "image", "name": "RGB", "resolution": [64, 64] }
+        ],
+        "exe_link": "",
+        "comment": "Capture live from camera"
+    },
+    {
+        "template": "storedvideo",
+        "name": "Stored Video",
+        "category": "cv",
+        "input_ports": [],
+        "output_ports": [
+            { "type": "image", "name": "RGB", "resolution": [64, 64] }
+        ],
+        "exe_link": "",
+        "comment": "Video from disk/store"
+    },
+    {
+        "template": "img_resize",
+        "name": "Resize",
+        "category": "cv",
+        "input_ports": [
+            { "type": "image", "name": "RGB", "resolution": [1920, 1080] }
+        ],
+        "output_ports": [
+            { "type": "image", "name": "RGB", "resolution": [64, 64] }
+        ],
+        "exe_link": "",
+        "model_link": "",
+        "comment": "Resize a frame/image"
+    },
+    {
+        "template": "img_crop",
+        "name": "Crop",
+        "category": "cv",
+        "input_ports": [
+            { "type": "image", "name": "RGB", "resolution": [1920, 1080] }
+        ],
+        "output_ports": [
+            { "type": "image", "name": "RGB", "resolution": [64, 64] }
+        ],
+        "exe_link": "",
+        "model_link": "",
+        "comment": "Crops a frame/image"
+    },
+    {
+        "template": "img_cvtcolor",
+        "name": "Change the image's color space",
+        "category": "cv",
+        "input_ports": [
+            { "type": "image", "name": "RGB", "resolution": [1920, 1080] }
+        ],
+        "output_ports": [
+            { "type": "image", "name": "RGB", "resolution": [64, 64] }
+        ],
+        "exe_link": "",
+        "model_link": "",
+        "comment": "Change the image's color space"
+    },
+    {
+        "template": "img_show",
+        "name": "Show image",
+        "category": "cv",
+        "input_ports": [
+            { "type": "image", "name": "RGB", "resolution": [1920, 1080] }
+        ],
+        "output_ports": [],
+        "exe_link": "",
+        "comment": "Show image on screen"
+    },
+    {
+        "template": "networkcast",
+        "name": "Cast to network",
+        "category": "cv",
+        "input_ports": [
+            { "type": "image", "name": "RGB", "resolution": [1920, 1080] }
+        ],
+        "output_ports": [],
+        "exe_link": "",
+        "model_link": "",
+        "comment": "Cast to network"
+    },
+    {
+        "template": "face_detection",
+        "name": "Detect human faces",
+        "category": "ai",
+        "input_ports": [
+            { "type": "image", "name": "RGB", "resolution": [256, 256] }
+        ],
+        "output_ports": [
+            { "type": "metabox_1D_vector", "name": "num", "dimension": 256 }
+        ],
+        "confidenceScore": 0.6,
+        "exe_link": "",
+        "model_link": "",
+        "comment": "Detect human faces"
+    },
+    {
+        "template": "head_pose_detection",
+        "name": "Detect the head's pose",
+        "category": "ai",
+        "input_ports": [
+            { "type": "image", "name": "RGB", "resolution": [256, 256] },
+            { "type": "metabox_1D_vector", "name": "num", "dimension": 256 }
+        ],
+        "output_ports": [
+            { "type": "meta_point_1D_vector", "name": "num", "dimension": 68 }
+        ],
+        "exe_link": "",
+        "model_link": "",
+        "comment": "Detect the pose of detected faces"
+    },
+    {
+        "template": "head_landmarks_detection",
+        "name": "Detect Head Landmarks",
+        "category": "ai",
+        "input_ports": [
+            { "type": "image", "name": "RGB", "resolution": [256, 256] },
+            { "type": "metabox_1D_vector", "name": "num", "dimension": 256 }
+        ],
+        "output_ports": [
+            { "type": "meta_point_1D_vector", "name": "num", "dimension": 68 }
+        ],
+        "exe_link": "",
+        "model_link": "",
+        "comment": "Detect the landmarks of detected faces"
+    },
+    {
+        "template": "eye_opennes_estimation",
+        "name": "Estimate Eye openness",
+        "category": "ai",
+        "input_ports": [
+            { "type": "image", "name": "RGB", "resolution": [256, 256] },
+            { "type": "metabox_1D_vector", "name": "num", "dimension": 256 }
+        ],
+        "output_ports": [
+            { "type": "meta_point_1D_vector", "name": "num", "dimension": 68 }
+        ],
+        "exe_link": "",
+        "model_link": "",
+        "comment": "Check eye is open or not"
+    },
+    {
+        "template": "mouth_opennes_estimation",
+        "name": "Estimate Mouth openness",
+        "category": "ai",
+        "input_ports": [
+            { "type": "image", "name": "RGB", "resolution": [256, 256] },
+            { "type": "metabox_1D_vector", "name": "num", "dimension": 256 }
+        ],
+        "output_ports": [
+            { "type": "meta_point_1D_vector", "name": "num", "dimension": 68 }
+        ],
+        "exe_link": "",
+        "model_link": "",
+        "comment": "Check mouth is open or not"
+    },
+    {
+        "template": "car_detection",
+        "name": "Detect cars",
+        "category": "ai",
+        "input_ports": [
+            { "type": "image", "name": "RGB", "resolution": [256, 256] },
+            { "type": "metabox_1D_vector", "name": "num", "dimension": 256 }
+        ],
+        "output_ports": [
+            { "type": "meta_point_1D_vector", "name": "num", "dimension": 68 }
+        ],
+        "exe_link": "",
+        "model_link": "",
+        "comment": "Detect cars"
+    },
+    {
+        "template": "lens_glare_correction",
+        "name": "Detect and remove glares",
+        "category": "ai",
+        "input_ports": [
+            { "type": "image", "name": "RGB", "resolution": [256, 256] },
+            { "type": "metabox_1D_vector", "name": "num", "dimension": 256 }
+        ],
+        "output_ports": [
+            { "type": "meta_point_1D_vector", "name": "num", "dimension": 68 }
+        ],
+        "exe_link": "",
+        "model_link": "",
+        "comment": "Remove potential glares on captured images"
+    },
+    {
+        "template": "average",
+        "name": "Average",
+        "category": "math",
+        "input_ports": [
+            { "type": "image", "name": "RGB", "resolution": [256, 256] }
+        ],
+        "output_ports": [
+            { "type": "meta_point_1D_vector", "name": "num", "dimension": 68 }
+        ],
+        "exe_link": "",
+        "model_link": "",
+        "comment": "Calculate mean"
+    },
+    {
+        "template": "img_facedetect_sp",
+        "name": "detect face and change color",
+        "category": "cv",
+        "input_ports": [
+            {
+                "type": "geolocation",
+                "name": "position"
+            },
+            {
+                "type": "image",
+                "name": "RGB",
+                "resolution": [1920, 1080]
+            }
+        ],
+        "output_ports": [
+            {
+                "type": "image",
+                "name": "RGB",
+                "resolution": [64, 64]
+            }
+        ],
+        "comment": "faces based on earth locations",
+        "specific_criminals": "-",
+        "hint": "specific_criminals: if you provide specific csv file, it will be used to filter the criminals. ex: cia.csv",
+        "linkages": [
+            {
+                "subgraph": "facedetect-special.json",
+                "input_ports": [
+                    {
+                        "source": ".",
+                        "sourceHandle": "in-2",
+                        "target": "subgraph.1",
+                        "targetHandle": "in-1"
+                    },
+                    {
+                        "source": ".",
+                        "sourceHandle": "in-2",
+                        "target": "subgraph.3",
+                        "targetHandle": "in-1"
+                    },
+                    {
+                        "source": ".",
+                        "sourceHandle": "in-1",
+                        "target": "subgraph.4",
+                        "targetHandle": "in-1"
+                    }
+                ],
+                "output_ports": [
+                    {
+                        "source": "subgraph.2",
+                        "sourceHandle": "out-1",
+                        "target": ".",
+                        "targetHandle": "out-1"
+                    }
+                ],
+                "attributes": [
+                    {
+                        "source": ".",
+                        "sourceAttrib": "specific_criminals",
+                        "target": "subgraph.4",
+                        "targetAttrib": "known_locations"
+                    }
+                ]
+            }
+        ]
+    }
+]
