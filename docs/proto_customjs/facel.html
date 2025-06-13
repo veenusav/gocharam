@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Landmark Detection</title>
+    <!-- Tailwind CSS for basic styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: "Inter", sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden; /* Prevent horizontal scrolling */
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 1rem;
+            box-sizing: border-box;
+        }
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 640px; /* Max width for video/canvas */
+            border-radius: 0.75rem; /* rounded-lg */
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-lg */
+            background-color: #f3f4f6; /* bg-gray-100 */
+        }
+        video, canvas {
+            width: 100%;
+            height: auto; /* Maintain aspect ratio */
+            display: block;
+            border-radius: 0.75rem; /* rounded-lg */
+            transform: scaleX(-1); /* Flip video horizontally for mirror effect */
+        }
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 10;
+        }
+        .message-box {
+            background-color: #fef2f2; /* bg-red-100 */
+            border: 1px solid #ef4444; /* border-red-500 */
+            color: #b91c1c; /* text-red-700 */
+            padding: 0.75rem 1rem;
+            margin-top: 1rem;
+            border-radius: 0.5rem; /* rounded-md */
+            font-size: 0.875rem; /* text-sm */
+            width: 100%;
+            max-width: 640px;
+            text-align: center;
+        }
+        @media (min-width: 640px) { /* sm breakpoint */
+            .container {
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-100 to-purple-100 text-gray-800">
+    <div class="container">
+        <h1 class="text-3xl sm:text-4xl font-bold text-center mb-6 text-indigo-700">
+            Live Face Landmark Detection
+        </h1>
+        <p class="text-center mb-8 text-lg text-gray-600">
+            Using TensorFlow.js and MediaPipe Face Mesh
+        </p>
+
+        <div class="video-container">
+            <video id="video" playsinline autoplay muted></video>
+            <canvas id="outputCanvas"></canvas>
+            <div id="loadingMessage" class="absolute inset-0 flex items-center justify-center bg-gray-900 bg-opacity-75 text-white text-xl font-semibold rounded-lg">
+                Loading AI model... Please wait.
+            </div>
+            <div id="errorMessage" class="hidden message-box"></div>
+        </div>
+
+        <div class="mt-8 text-center text-gray-600">
+            <p>Ensure camera access is granted in your browser.</p>
+        </div>
+    </div>
+
+    <!-- TensorFlow.js and Face Landmarks Detection Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl"></script>
+    <!-- Explicitly load MediaPipe Face Mesh for the 'mediapipe' runtime -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/face-landmarks-detection"></script>
+
+    <script type="module">
+        // Get references to HTML elements
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('outputCanvas');
+        const ctx = canvas.getContext('2d');
+        const loadingMessage = document.getElementById('loadingMessage');
+        const errorMessage = document.getElementById('errorMessage');
+
+        let detector = null; // Our face landmark detector
+        let animationFrameId = null; // To control the animation loop
+
+        // Function to display messages to the user
+        function showMessage(message, isError = false) {
+            errorMessage.textContent = message;
+            errorMessage.classList.remove('hidden', 'bg-red-100', 'border-red-500', 'text-red-700', 'bg-green-100', 'border-green-500', 'text-green-700');
+            if (isError) {
+                errorMessage.classList.add('bg-red-100', 'border-red-500', 'text-red-700');
+            } else {
+                errorMessage.classList.add('bg-green-100', 'border-green-500', 'text-green-700');
+            }
+        }
+
+        // Function to set up the webcam feed
+        async function setupCamera() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: true
+                });
+                video.srcObject = stream;
+
+                return new Promise((resolve) => {
+                    video.onloadedmetadata = () => {
+                        resolve(video);
+                    };
+                });
+            } catch (error) {
+                console.error("Error accessing webcam:", error);
+                loadingMessage.classList.add('hidden');
+                showMessage(`Failed to access webcam. Please ensure camera access is granted. Error: ${error.message}`, true);
+                return null;
+            }
+        }
+
+        // Function to load the face landmark detection model
+        async function loadFaceLandmarkModel() {
+            try {
+                // We use MediaPipeFaceMesh model.
+                // The runtime can be 'mediapipe' (recommended for performance) or 'tfjs'.
+                // If 'mediapipe' is chosen, solutionPath is required to load MediaPipe assets.
+                const model = faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh;
+                const detectorConfig = {
+                    runtime: 'mediapipe', // 'mediapipe' or 'tfjs'
+                    solutionPath: 'https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh',
+                    // Optional: maxFaces to limit the number of faces detected
+                    // maxFaces: 1, 
+                    // Optional: detectionConfidence threshold
+                    // detectionConfidence: 0.9,
+                };
+
+                detector = await faceLandmarksDetection.createDetector(model, detectorConfig);
+                console.log("Face landmark model loaded successfully!");
+                loadingMessage.classList.add('hidden'); // Hide loading message
+                showMessage("Model loaded! Looking for faces...", false);
+            } catch (error) {
+                console.error("Error loading face landmark model:", error);
+                loadingMessage.classList.add('hidden');
+                showMessage(`Failed to load AI model. Please try again. Error: ${error.message}`, true);
+                detector = null; // Ensure detector is null if loading fails
+            }
+        }
+
+        // Function to draw landmarks on the canvas
+        function drawLandmarks(faces) {
+            // Clear the canvas for the new frame
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            if (faces && faces.length > 0) {
+                faces.forEach(face => {
+                    // Draw bounding box (optional)
+                    // ctx.strokeStyle = 'red';
+                    // ctx.lineWidth = 2;
+                    // ctx.strokeRect(face.box.xMin, face.box.yMin, face.box.width, face.box.height);
+
+                    // Draw keypoints
+                    ctx.fillStyle = '#6366f1'; // Tailwind's indigo-500
+                    face.keypoints.forEach(keypoint => {
+                        // Flip the x-coordinate because the video is mirrored
+                        const flippedX = canvas.width - keypoint.x;
+                        ctx.beginPath();
+                        ctx.arc(flippedX, keypoint.y, 2, 0, 2 * Math.PI); // Draw a small circle for each landmark
+                        ctx.fill();
+                    });
+
+                    // You can also draw connections between keypoints for a mesh effect
+                    // Example for drawing connections (you'd need to define these connections)
+                    // The `face-landmarks-detection` package does not provide a direct
+                    // utility to draw connections, but you can define them based on
+                    // MediaPipe's Face Mesh topology.
+                    // For example, to draw lines around the lips or eyes:
+                    // const lips = [0, 1, 2, ..., 10]; // Hypothetical indices for lips
+                    // drawPath(ctx, face.keypoints, lips, '#ef4444'); // red
+
+                    // For MediaPipeFaceMesh, connections are more complex.
+                    // The `face-landmarks-detection` demo often uses a drawing utility
+                    // from MediaPipe directly or pre-defined connection arrays.
+                    // For simplicity, we'll just draw points here.
+                });
+            }
+        }
+
+        // Main detection loop
+        async function detectFaces() {
+            // Corrected: video.HAVE_ENOUGH_DATA
+            if (video.readyState === video.HAVE_ENOUGH_DATA && detector) {
+                // Set canvas dimensions to match video dimensions
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+
+                // Estimate faces. The video element is directly passed.
+                // flipHorizontal should be true if your webcam is mirrored.
+                const faces = await detector.estimateFaces(video, { flipHorizontal: true });
+
+                drawLandmarks(faces);
+            }
+            // Request the next animation frame
+            animationFrameId = requestAnimationFrame(detectFaces);
+        }
+
+        // Initialize the application
+        async function init() {
+            const cameraInitialized = await setupCamera();
+            if (cameraInitialized) {
+                video.addEventListener('loadeddata', async () => {
+                    await loadFaceLandmarkModel();
+                    if (detector) {
+                        detectFaces(); // Start the detection loop
+                    }
+                });
+            }
+        }
+
+        // Start the application when the window loads
+        window.onload = init;
+
+        // Handle window resizing to ensure canvas scales correctly
+        window.onresize = () => {
+            // Re-adjust canvas size based on video feed if necessary
+            if (video.videoWidth && video.videoHeight) {
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+            }
+        };
+
+        // Clean up when the page is unloaded (optional, but good practice)
+        window.onbeforeunload = () => {
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+            }
+            if (detector) {
+                detector.dispose();
+            }
+            if (video.srcObject) {
+                video.srcObject.getTracks().forEach(track => track.stop());
+            }
+        };
+
+    </script>
+</body>
+</html>
